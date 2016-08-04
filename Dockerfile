@@ -1,17 +1,20 @@
+# base image from docker.hub
 FROM openshift/base-centos7
 
-MAINTAINER Tobias Florek <tob@butter.sh>
+MAINTAINER Xun Zhou <xun.zhou@momox.biz>
 
+# system environments
 ENV NGINX_VERSION 1.8
 ENV NGINX_BASE_DIR /opt/rh/rh-nginx18/root
 ENV NGINX_VAR_DIR /var/opt/rh/rh-nginx18
 
+# openshift labels
 LABEL io.k8s.description="Platform for serving nginx-based applications (static files)" \
       io.k8s.display-name="nginx builder ${NGINX_VERSION}" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,nginx,webserver"
 
-
+# install nginx
 RUN yum install --setopt=tsflags=nodocs -y centos-release-scl-rh \
  && yum install --setopt=tsflags=nodocs -y bcrypt rh-nginx${NGINX_VERSION/\./} \
  && yum clean all -y \
@@ -22,6 +25,7 @@ RUN yum install --setopt=tsflags=nodocs -y centos-release-scl-rh \
                    $NGINX_VAR_DIR/run \
                    /opt/app-root/run
 
+# copy config sample files
 COPY ./etc/ /opt/app-root/etc
 COPY ./.s2i/bin/ ${STI_SCRIPTS_PATH}
 
@@ -30,6 +34,7 @@ RUN cp /opt/app-root/etc/nginx.server.sample.conf /opt/app-root/etc/nginx.conf.d
 
 USER 1001
 
+# port 8080
 EXPOSE 8080
 
 CMD ["usage"]
