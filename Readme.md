@@ -1,3 +1,6 @@
+
+
+
 # Source-to-image builder for static nginx containers
 
 ## Basic use case
@@ -45,5 +48,8 @@ There are some environment variables you can set to influence **build** behavior
 
 Either `NGINX_CONF_FILE` sets a config snippet to use or `NGINX_CONF_DIR`
 will copy config from this dir (defaults to `conf.d`).
+
+
+
 
 `NGINX_AUX_DIR` sets the aux directory for auxiliary files.
